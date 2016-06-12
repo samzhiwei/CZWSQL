@@ -1,0 +1,346 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		51111CBD1D0D3F70005C4166 /* OffLineSQLLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 51111CBC1D0D3F70005C4166 /* OffLineSQLLoader.m */; };
+		51111CC31D0D42C2005C4166 /* big5.txt in Resources */ = {isa = PBXBuildFile; fileRef = 51111CBF1D0D42C2005C4166 /* big5.txt */; };
+		51111CC41D0D42C2005C4166 /* convertGB_BIG.m in Sources */ = {isa = PBXBuildFile; fileRef = 51111CC11D0D42C2005C4166 /* convertGB_BIG.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		51111CC51D0D42C2005C4166 /* gb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 51111CC21D0D42C2005C4166 /* gb.txt */; };
+		514558791D0D57170014F956 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 514558781D0D57170014F956 /* libsqlite3.0.tbd */; };
+		5145587B1D0D571E0014F956 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5145587A1D0D571E0014F956 /* libsqlite3.tbd */; };
+		51AE3CCC1D0D3EDD00B27EFB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 51AE3CCB1D0D3EDD00B27EFB /* main.m */; };
+		51AE3CCF1D0D3EDD00B27EFB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 51AE3CCE1D0D3EDD00B27EFB /* AppDelegate.m */; };
+		51AE3CD21D0D3EDD00B27EFB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51AE3CD11D0D3EDD00B27EFB /* ViewController.m */; };
+		51AE3CD51D0D3EDD00B27EFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51AE3CD31D0D3EDD00B27EFB /* Main.storyboard */; };
+		51AE3CD71D0D3EDD00B27EFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51AE3CD61D0D3EDD00B27EFB /* Assets.xcassets */; };
+		51AE3CDA1D0D3EDD00B27EFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51AE3CD81D0D3EDD00B27EFB /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		51111CBB1D0D3F70005C4166 /* OffLineSQLLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OffLineSQLLoader.h; sourceTree = "<group>"; };
+		51111CBC1D0D3F70005C4166 /* OffLineSQLLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OffLineSQLLoader.m; sourceTree = "<group>"; };
+		51111CBF1D0D42C2005C4166 /* big5.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = big5.txt; sourceTree = "<group>"; };
+		51111CC01D0D42C2005C4166 /* convertGB_BIG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = convertGB_BIG.h; sourceTree = "<group>"; };
+		51111CC11D0D42C2005C4166 /* convertGB_BIG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = convertGB_BIG.m; sourceTree = "<group>"; };
+		51111CC21D0D42C2005C4166 /* gb.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gb.txt; sourceTree = "<group>"; };
+		51111CC61D0D42D1005C4166 /* guangzhou.sql */ = {isa = PBXFileReference; lastKnownFileType = file; path = guangzhou.sql; sourceTree = "<group>"; };
+		514558781D0D57170014F956 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		5145587A1D0D571E0014F956 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		51AE3CC71D0D3EDD00B27EFB /* CZWSQL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CZWSQL.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		51AE3CCB1D0D3EDD00B27EFB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		51AE3CCD1D0D3EDD00B27EFB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		51AE3CCE1D0D3EDD00B27EFB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		51AE3CD01D0D3EDD00B27EFB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		51AE3CD11D0D3EDD00B27EFB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		51AE3CD41D0D3EDD00B27EFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		51AE3CD61D0D3EDD00B27EFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		51AE3CD91D0D3EDD00B27EFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		51AE3CDB1D0D3EDD00B27EFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		51AE3CC41D0D3EDD00B27EFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5145587B1D0D571E0014F956 /* libsqlite3.tbd in Frameworks */,
+				514558791D0D57170014F956 /* libsqlite3.0.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		51111CBE1D0D42C2005C4166 /* convertGB_BIG */ = {
+			isa = PBXGroup;
+			children = (
+				51111CBF1D0D42C2005C4166 /* big5.txt */,
+				51111CC01D0D42C2005C4166 /* convertGB_BIG.h */,
+				51111CC11D0D42C2005C4166 /* convertGB_BIG.m */,
+				51111CC21D0D42C2005C4166 /* gb.txt */,
+			);
+			path = convertGB_BIG;
+			sourceTree = "<group>";
+		};
+		51AE3CBE1D0D3EDD00B27EFB = {
+			isa = PBXGroup;
+			children = (
+				5145587A1D0D571E0014F956 /* libsqlite3.tbd */,
+				514558781D0D57170014F956 /* libsqlite3.0.tbd */,
+				51AE3CC91D0D3EDD00B27EFB /* CZWSQL */,
+				51AE3CC81D0D3EDD00B27EFB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		51AE3CC81D0D3EDD00B27EFB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				51AE3CC71D0D3EDD00B27EFB /* CZWSQL.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		51AE3CC91D0D3EDD00B27EFB /* CZWSQL */ = {
+			isa = PBXGroup;
+			children = (
+				51AE3CCD1D0D3EDD00B27EFB /* AppDelegate.h */,
+				51AE3CCE1D0D3EDD00B27EFB /* AppDelegate.m */,
+				51AE3CD01D0D3EDD00B27EFB /* ViewController.h */,
+				51AE3CD11D0D3EDD00B27EFB /* ViewController.m */,
+				51111CBB1D0D3F70005C4166 /* OffLineSQLLoader.h */,
+				51111CBC1D0D3F70005C4166 /* OffLineSQLLoader.m */,
+				51111CC61D0D42D1005C4166 /* guangzhou.sql */,
+				51111CBE1D0D42C2005C4166 /* convertGB_BIG */,
+				51AE3CD31D0D3EDD00B27EFB /* Main.storyboard */,
+				51AE3CD61D0D3EDD00B27EFB /* Assets.xcassets */,
+				51AE3CD81D0D3EDD00B27EFB /* LaunchScreen.storyboard */,
+				51AE3CDB1D0D3EDD00B27EFB /* Info.plist */,
+				51AE3CCA1D0D3EDD00B27EFB /* Supporting Files */,
+			);
+			path = CZWSQL;
+			sourceTree = "<group>";
+		};
+		51AE3CCA1D0D3EDD00B27EFB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				51AE3CCB1D0D3EDD00B27EFB /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		51AE3CC61D0D3EDD00B27EFB /* CZWSQL */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 51AE3CDE1D0D3EDD00B27EFB /* Build configuration list for PBXNativeTarget "CZWSQL" */;
+			buildPhases = (
+				51AE3CC31D0D3EDD00B27EFB /* Sources */,
+				51AE3CC41D0D3EDD00B27EFB /* Frameworks */,
+				51AE3CC51D0D3EDD00B27EFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CZWSQL;
+			productName = CZWSQL;
+			productReference = 51AE3CC71D0D3EDD00B27EFB /* CZWSQL.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		51AE3CBF1D0D3EDD00B27EFB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = Tianqu;
+				TargetAttributes = {
+					51AE3CC61D0D3EDD00B27EFB = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = 51AE3CC21D0D3EDD00B27EFB /* Build configuration list for PBXProject "CZWSQL" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 51AE3CBE1D0D3EDD00B27EFB;
+			productRefGroup = 51AE3CC81D0D3EDD00B27EFB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				51AE3CC61D0D3EDD00B27EFB /* CZWSQL */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		51AE3CC51D0D3EDD00B27EFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51111CC51D0D42C2005C4166 /* gb.txt in Resources */,
+				51AE3CDA1D0D3EDD00B27EFB /* LaunchScreen.storyboard in Resources */,
+				51111CC31D0D42C2005C4166 /* big5.txt in Resources */,
+				51AE3CD71D0D3EDD00B27EFB /* Assets.xcassets in Resources */,
+				51AE3CD51D0D3EDD00B27EFB /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		51AE3CC31D0D3EDD00B27EFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51AE3CD21D0D3EDD00B27EFB /* ViewController.m in Sources */,
+				51AE3CCF1D0D3EDD00B27EFB /* AppDelegate.m in Sources */,
+				51AE3CCC1D0D3EDD00B27EFB /* main.m in Sources */,
+				51111CBD1D0D3F70005C4166 /* OffLineSQLLoader.m in Sources */,
+				51111CC41D0D42C2005C4166 /* convertGB_BIG.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		51AE3CD31D0D3EDD00B27EFB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				51AE3CD41D0D3EDD00B27EFB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		51AE3CD81D0D3EDD00B27EFB /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				51AE3CD91D0D3EDD00B27EFB /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		51AE3CDC1D0D3EDD00B27EFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		51AE3CDD1D0D3EDD00B27EFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		51AE3CDF1D0D3EDD00B27EFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = CZWSQL/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.tianqu.CZWSQL;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		51AE3CE01D0D3EDD00B27EFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = CZWSQL/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.tianqu.CZWSQL;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		51AE3CC21D0D3EDD00B27EFB /* Build configuration list for PBXProject "CZWSQL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51AE3CDC1D0D3EDD00B27EFB /* Debug */,
+				51AE3CDD1D0D3EDD00B27EFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		51AE3CDE1D0D3EDD00B27EFB /* Build configuration list for PBXNativeTarget "CZWSQL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51AE3CDF1D0D3EDD00B27EFB /* Debug */,
+				51AE3CE01D0D3EDD00B27EFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 51AE3CBF1D0D3EDD00B27EFB /* Project object */;
+}
