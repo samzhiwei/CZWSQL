@@ -28,9 +28,9 @@
 		51111CC01D0D42C2005C4166 /* convertGB_BIG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = convertGB_BIG.h; sourceTree = "<group>"; };
 		51111CC11D0D42C2005C4166 /* convertGB_BIG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = convertGB_BIG.m; sourceTree = "<group>"; };
 		51111CC21D0D42C2005C4166 /* gb.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gb.txt; sourceTree = "<group>"; };
-		51111CC61D0D42D1005C4166 /* guangzhou.sql */ = {isa = PBXFileReference; lastKnownFileType = file; path = guangzhou.sql; sourceTree = "<group>"; };
 		514558781D0D57170014F956 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		5145587A1D0D571E0014F956 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		5145587C1D0E9D390014F956 /* guangzhou */ = {isa = PBXFileReference; lastKnownFileType = file; path = guangzhou; sourceTree = "<group>"; };
 		51AE3CC71D0D3EDD00B27EFB /* CZWSQL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CZWSQL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51AE3CCB1D0D3EDD00B27EFB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		51AE3CCD1D0D3EDD00B27EFB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -94,7 +94,7 @@
 				51AE3CD11D0D3EDD00B27EFB /* ViewController.m */,
 				51111CBB1D0D3F70005C4166 /* OffLineSQLLoader.h */,
 				51111CBC1D0D3F70005C4166 /* OffLineSQLLoader.m */,
-				51111CC61D0D42D1005C4166 /* guangzhou.sql */,
+				5145587C1D0E9D390014F956 /* guangzhou */,
 				51111CBE1D0D42C2005C4166 /* convertGB_BIG */,
 				51AE3CD31D0D3EDD00B27EFB /* Main.storyboard */,
 				51AE3CD61D0D3EDD00B27EFB /* Assets.xcassets */,

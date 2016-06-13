@@ -18,7 +18,9 @@
     [super viewDidLoad];
     OffLineSQLLoader *loader = OffLineLoader;
     [loader configureDataBasePathWithCityPinyin:@"guangzhou"];
-    [loader czw_searchLineWithText:@"增城"];
+    NSMutableArray *array = [loader czw_searchLineWithText:@"增城"];
+    NSMutableArray *array1 = [loader czw_searchStationWithText:@"东晓"];
+    
 }
 
 - (void)didReceiveMemoryWarning {
