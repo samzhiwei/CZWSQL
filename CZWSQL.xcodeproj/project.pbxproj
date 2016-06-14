@@ -13,6 +13,7 @@
 		51111CC51D0D42C2005C4166 /* gb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 51111CC21D0D42C2005C4166 /* gb.txt */; };
 		514558791D0D57170014F956 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 514558781D0D57170014F956 /* libsqlite3.0.tbd */; };
 		5145587B1D0D571E0014F956 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5145587A1D0D571E0014F956 /* libsqlite3.tbd */; };
+		5145587F1D0FACE00014F956 /* NSString+da.m in Sources */ = {isa = PBXBuildFile; fileRef = 5145587E1D0FACE00014F956 /* NSString+da.m */; };
 		51AE3CCC1D0D3EDD00B27EFB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 51AE3CCB1D0D3EDD00B27EFB /* main.m */; };
 		51AE3CCF1D0D3EDD00B27EFB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 51AE3CCE1D0D3EDD00B27EFB /* AppDelegate.m */; };
 		51AE3CD21D0D3EDD00B27EFB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51AE3CD11D0D3EDD00B27EFB /* ViewController.m */; };
@@ -31,6 +32,8 @@
 		514558781D0D57170014F956 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		5145587A1D0D571E0014F956 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		5145587C1D0E9D390014F956 /* guangzhou */ = {isa = PBXFileReference; lastKnownFileType = file; path = guangzhou; sourceTree = "<group>"; };
+		5145587D1D0FACE00014F956 /* NSString+da.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+da.h"; sourceTree = "<group>"; };
+		5145587E1D0FACE00014F956 /* NSString+da.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+da.m"; sourceTree = "<group>"; };
 		51AE3CC71D0D3EDD00B27EFB /* CZWSQL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CZWSQL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51AE3CCB1D0D3EDD00B27EFB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		51AE3CCD1D0D3EDD00B27EFB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -94,6 +97,8 @@
 				51AE3CD11D0D3EDD00B27EFB /* ViewController.m */,
 				51111CBB1D0D3F70005C4166 /* OffLineSQLLoader.h */,
 				51111CBC1D0D3F70005C4166 /* OffLineSQLLoader.m */,
+				5145587D1D0FACE00014F956 /* NSString+da.h */,
+				5145587E1D0FACE00014F956 /* NSString+da.m */,
 				5145587C1D0E9D390014F956 /* guangzhou */,
 				51111CBE1D0D42C2005C4166 /* convertGB_BIG */,
 				51AE3CD31D0D3EDD00B27EFB /* Main.storyboard */,
@@ -189,6 +194,7 @@
 				51AE3CCF1D0D3EDD00B27EFB /* AppDelegate.m in Sources */,
 				51AE3CCC1D0D3EDD00B27EFB /* main.m in Sources */,
 				51111CBD1D0D3F70005C4166 /* OffLineSQLLoader.m in Sources */,
+				5145587F1D0FACE00014F956 /* NSString+da.m in Sources */,
 				51111CC41D0D42C2005C4166 /* convertGB_BIG.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
