@@ -15,6 +15,7 @@
 - (SqlQueryStringMaker *(^)(NSString *))select;
 - (SqlQueryStringMaker *(^)(NSString *))from;
 - (SqlQueryStringMaker *(^)(NSString *))where;
+- (SqlQueryStringMaker *(^)(NSString *))groupBy;
 - (SqlQueryStringMaker *(^)(NSString *))orderBy;
 - (SqlQueryStringMaker *(^)(NSString *))limit;
 @end
@@ -41,15 +42,21 @@
  */
 - (NSMutableArray *)czw_searchLineWithCategoryId:(NSNumber *)categoryId;
 
+/**
+ *  根据line.code搜索线路详情
+ */
+- (NSMutableArray *)czw_searchLineWithLineCode:(NSString *)lineCode;
+
+/**
+ *  根据lineId搜索经过该站的线路
+ */
+- (NSMutableArray *)czw_searchStationInLineWithLineId:(NSNumber *)lineId;
 
 /**
  *  根据字符搜索线路
  */
 - (NSMutableArray *)czw_searchLineWithText:(NSString *)searchText;
-/**
- *  根据line.code搜索经过该站的线路
- */
-- (NSMutableArray *)czw_searchStationInLineWithLineId:(NSNumber *)lineId;
+
 
 /**
  *  根据字符搜索站点

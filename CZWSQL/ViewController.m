@@ -14,31 +14,40 @@
 @end
 
 @implementation ViewController
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     OffLineSQLLoader *loader = OffLineLoader;
     [loader configureDataBasePathWithCityPinyin:@"guangzhou"];
+    NSMutableArray *arr = [loader czw_searchLineViaStationWithZid:@59];
+    
+    
+    
     self.tableView = [[UITableView alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.backgroundColor = [UIColor yellowColor];
     [self.view addSubview:self.tableView];
-////    NSMutableArray *arr = [loader czw_searchAllLineCategory];
-////    NSMutableArray *arr2 = [loader czw_searchLineWithCategoryId:[NSNumber numberWithInt:3]];
-//    NSMutableArray *array = [loader czw_searchLineWithText:@"d"];
-//    //NSMutableArray *array1 = [loader czw_searchStationWithText:@"海珠"];
-////    NSMutableArray *ar = [loader czw_searchStationInLineWithLineId:[NSNumber numberWithInt:15]];
-//  NSMutableArray  *ar2 = [loader czw_searchLineViaStationWithZid:[NSNumber numberWithInt:3587]];
-    self.data = [loader czw_searchStationWithText:@"海珠"];
-    for (NSDictionary *dic1 in _data) {
-        NSNumber *zid = [dic1 objectForKey:@"zid"];
-        NSMutableArray *list = [OffLineLoader czw_searchLineViaStationWithZid:zid];
-        NSString *allLine = [[NSString alloc]init];
-        for (NSDictionary *dic2 in list) {
-            allLine = [allLine stringByAppendingString:[[dic2 objectForKey:@"name"] stringByAppendingString:@"/"] ];
-        }
-    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(did:) name:@"did" object:nil];
+//    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+//    NSBlockOperation *blockOp = [NSBlockOperation blockOperationWithBlock:^{
+        self.data = [loader czw_searchStationWithText:@"海珠"];
+//        for (NSMutableDictionary *dic1 in _data) {
+//            NSNumber *zid = [dic1 objectForKey:@"zid"];
+//            NSMutableArray *list = [OffLineLoader czw_searchLineViaStationWithZid:zid];
+//            NSString *allLine = [[NSString alloc]init];
+//            for (NSDictionary *dic2 in list) {
+//                allLine = [allLine stringByAppendingString:[[dic2 objectForKey:@"name"] stringByAppendingString:@"/"]];
+//            }
+//            [dic1 setObject:allLine forKey:@"lineName"];
+//        }
+        
+        //[[NSNotificationCenter defaultCenter] postNotificationName:@"did" object:nil];
+//    }];
+//    [queue addOperation:blockOp];
+}
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"did" object:nil];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -52,8 +61,16 @@
     }
     NSDictionary *dic = self.data[indexPath.row];
     cell.textLabel.text = [dic objectForKey:@"name"];
-    cell.detailTextLabel.text = allLine;
+    cell.detailTextLabel.text = [dic objectForKey:@"lineName"];
     return cell;
 }
 
+- (void)did:(NSNotification *)noti{
+    NSLog(@"当前线程:%@,当前方法:%s",[NSThread currentThread], __FUNCTION__);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"当前线程:%@,当前方法:%s",[NSThread currentThread], __FUNCTION__);
+        [self.tableView reloadData];
+    });
+    
+}
 @end
