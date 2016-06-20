@@ -10,71 +10,6 @@
 #import "convertGB_BIG/convertGB_BIG.h"
 #import <sqlite3.h>
 
-@implementation SqlQueryStringMaker
-
-/**
- *  拼语句
- */
-- (SqlQueryStringMaker *(^)(NSString *))select{
-    return ^SqlQueryStringMaker *(NSString *values){
-        if (values) {
-            self.result = [self.result stringByAppendingFormat:@"%@ ",values];
-        } else {
-            self.result = [self.result stringByAppendingFormat:@"* "];
-        }
-        return self;
-    };
-}
-
-- (SqlQueryStringMaker *(^)(NSString *))from{
-    return ^SqlQueryStringMaker *( NSString *tables){
-        if (tables) {
-            self.result = [self.result stringByAppendingFormat:@"FROM %@ ",tables];
-        } else {
-            @throw [NSException exceptionWithName:@"SqlQueryStringMaker from('table') cannot be nil" reason:@"check SqlQueryStringMaker" userInfo:nil];
-        }
-        return self;
-    };
-}
-
-- (SqlQueryStringMaker *(^)(NSString *))where{
-    return ^SqlQueryStringMaker *(NSString *where){
-        if (where) {
-            self.result = [self.result stringByAppendingFormat:@"WHERE %@ ",where];
-        }
-        return self;
-    };
-}
-
-- (SqlQueryStringMaker *(^)(NSString *))groupBy{
-    return ^SqlQueryStringMaker *(NSString *groupBy){
-        if (groupBy) {
-            self.result = [self.result stringByAppendingFormat:@"GROUP BY %@ ",groupBy];
-        }
-        return self;
-    };
-}
-
-- (SqlQueryStringMaker *(^)(NSString *))orderBy{
-    return ^SqlQueryStringMaker *(NSString *orderBy){
-        if (orderBy) {
-            self.result = [self.result stringByAppendingFormat:@"ORDER BY %@ ",orderBy];
-        }
-        return self;
-    };
-}
-
-- (SqlQueryStringMaker *(^)(NSString *))limit{
-    return ^SqlQueryStringMaker *(NSString *limit){
-        if (limit) {
-            self.result = [self.result stringByAppendingFormat:@"LIMIT %@ ",limit];
-        }
-        return self;
-    };
-}
-
-@end
-
 @implementation NSString (czw_splicingSqlQueryString)
 
 + (NSString *)makeSqlQueryString:(void (^)(SqlQueryStringMaker *makeQS))splicing
@@ -87,8 +22,6 @@
 @end
 
 @interface OffLineSQLLoader ()
-@property (copy, nonatomic) NSString *currentDataBasePath;
-@property (assign, nonatomic) sqlite3 *database;
 @end
 @implementation OffLineSQLLoader
 
@@ -119,104 +52,12 @@
     self.currentDataBasePath = path;
 }
 
-#pragma mark - sql相关操作
-- (BOOL)sqliteOpen{
-    if (sqlite3_open([self.currentDataBasePath UTF8String], &_database) == SQLITE_OK) {
-        //NSLog(@"sqliteOpen成功->path:%@",self.currentDataBasePath);
-        return YES;
-    } else {
-        NSLog(@"sqliteOpen打开失败:%s",sqlite3_errmsg(_database));
-        return NO;
-    }
-}
-
-- (BOOL)sqliteClose{
-    if (sqlite3_close(_database) == SQLITE_OK) {
-        //NSLog(@"sqliteClose成功->path:%@",self.currentDataBasePath);
-        return YES;
-    } else {
-        NSLog(@"sqliteClose打开失败:%s",sqlite3_errmsg(_database));
-        return NO;
-    }
-}
-
-
-
-
-/**
- *  搜索table
- */
-
-- (void)searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy limit:(NSString *)limit handler:(void (^)(sqlite3_stmt *stmt))handler{
-    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    if ([self sqliteOpen]) {
-        sqlite3_stmt *stmt;
-        NSString *selSql = [NSString makeSqlQueryString:^(SqlQueryStringMaker *makeQS) {
-            makeQS.select(values).from(table).where(condition).groupBy(groupBy).orderBy(orderBy).limit(limit);
-        }];
-        NSLog(@"Sql搜索语句 = %@",selSql);
-        int ret2 = sqlite3_prepare_v2(_database, [selSql UTF8String], -1, &stmt, NULL);
-        if (ret2 == SQLITE_OK) {
-            while (sqlite3_step(stmt) == SQLITE_ROW) {//遍历
-                handler(stmt);
-            }
-        } else{
-            NSLog(@"table打开失败:%s",sqlite3_errmsg(_database));
-        }
-        sqlite3_finalize(stmt);
-        [self sqliteClose];
-        NSLog(@"sqlite库用时:%f",CFAbsoluteTimeGetCurrent() - startTime);
-    } else {
-        handler(NULL);
-    }
-    
-}
-
-- (void)searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy handler:(void (^)(sqlite3_stmt *stmt))handler{
-    [self searchValues:values fromTable:table where:condition groupBy:groupBy orderBy:orderBy limit:nil handler:^(sqlite3_stmt *stmt) {
-        handler(stmt);
-    }];
-}
-
-- (void)searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy handler:(void (^)(sqlite3_stmt *stmt))handler{
-    [self searchValues:values fromTable:table where:condition groupBy:groupBy orderBy:nil handler:^(sqlite3_stmt *stmt) {
-        handler(stmt);
-    }];
-}
-
-- (void)searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition handler:(void (^)(sqlite3_stmt *stmt))handler{
-    [self searchValues:values fromTable:table where:condition groupBy:nil handler:^(sqlite3_stmt *stmt) {
-        handler(stmt);
-    }];
-}
-
-- (void)searchTable:(NSString *)table where:(NSString *)condition handler:(void (^)(sqlite3_stmt *stmt))handler{
-    [self searchValues:nil fromTable:table where:condition handler:^(sqlite3_stmt *stmt) {
-        handler(stmt);
-    }];
-}
-
-- (void)searchTable:(NSString *)table handler:(void (^)(sqlite3_stmt *stmt))handler{
-    [self searchTable:table where:nil handler:^(sqlite3_stmt *stmt) {
-        handler(stmt);
-    }];
-}
-
-/**
- *  繁体转简体;
- */
-
-- (NSString *)textToSimplified:(NSString *)text{
-    convertGB_BIG *convertGbToBig = [[convertGB_BIG alloc] init];
-    return [convertGbToBig big5ToGb:[text uppercaseString]];
-}
-
 #pragma mark - Api
 
-- (NSMutableArray *)czw_searchAllLineCategory{
+- (NSMutableArray *)searchAllLineCategory{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     
-    [self searchValues:@"id,name" fromTable:@"category" where:nil handler:^(sqlite3_stmt *stmt) {
+    [self czw_searchValues:@"id,name" fromTable:@"category" where:nil handler:^(sqlite3_stmt *stmt) {
         int categoryId = sqlite3_column_int(stmt, 0);
         const char *name = (const char *)sqlite3_column_blob(stmt, 1);
         NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
@@ -228,10 +69,10 @@
     return resultArray;
 }
 
-- (NSMutableArray *)czw_searchLineWithCategoryId:(NSNumber *)categoryId{
+- (NSMutableArray *)searchLineWithCategoryId:(NSNumber *)categoryId{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSString *condition = [NSString stringWithFormat:@"categoryid = %d",[categoryId intValue]];
-    [self searchValues:@"name ,code ,id" fromTable:@"lines" where:condition groupBy:nil orderBy:@"number" handler:^(sqlite3_stmt *stmt) {
+    [self czw_searchValues:@"name ,code ,id" fromTable:@"lines" where:condition groupBy:nil orderBy:@"number" handler:^(sqlite3_stmt *stmt) {
         const char *name = (const char *)sqlite3_column_blob(stmt, 0);
         const char *code = (const char *)sqlite3_column_blob(stmt, 1);
         int lineId = sqlite3_column_int(stmt, 2);
@@ -244,12 +85,12 @@
     return resultArray;
 }
 
-- (NSMutableArray *)czw_searchLineWithLineCode:(NSString *)lineCode{
+- (NSMutableArray *)searchLineWithLineCode:(NSString *)lineCode{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSString *values = [NSString stringWithFormat:@"l.name ,l.code ,l.number ,lo.time,lo.lastupdate,lo.start,lo.end ,c.name ,lo.note ,lo.fare"];
     NSString *tables = [NSString stringWithFormat:@"lines as l ,linesothers as lo,company as c"];
     NSString *condition = [NSString stringWithFormat:@"lo.companyid = c.id AND l.id = lo.lineid AND l.code = '%@'",lineCode];
-    [self searchValues:values fromTable:tables where:condition handler:^(sqlite3_stmt *stmt) {
+    [self czw_searchValues:values fromTable:tables where:condition handler:^(sqlite3_stmt *stmt) {
         const char *lineName = (const char *)sqlite3_column_blob(stmt, 0);
         const char *lineCode = (const char *)sqlite3_column_blob(stmt, 1);
         int lineNumber = sqlite3_column_int(stmt, 2);
@@ -285,11 +126,11 @@
 }
 
 
-- (NSMutableArray *)czw_searchLineWithText:( NSString *)searchText{
+- (NSMutableArray *)searchLineWithText:( NSString *)searchText{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSString *uSearchText = [self textToSimplified:searchText];
     NSString *condition = [NSString stringWithFormat:@"name like '%%%@%%'",uSearchText];
-    [self searchValues:@"name,code,id" fromTable:@"lines" where:condition groupBy:nil orderBy:@"number" handler:^(sqlite3_stmt *stmt) {
+    [self czw_searchValues:@"name,code,id" fromTable:@"lines" where:condition groupBy:nil orderBy:@"number" handler:^(sqlite3_stmt *stmt) {
         const char *name = (const char *)sqlite3_column_blob(stmt, 0);
         const char *code = (const char *)sqlite3_column_blob(stmt, 1);
         int lineId = sqlite3_column_int(stmt, 2);//查询线路有多少站点用
@@ -306,12 +147,12 @@
     return resultArray;
 }
 
-- (NSMutableArray *)czw_searchStationInLineWithLineId:(NSNumber *)lineId{
+- (NSMutableArray *)searchStationInLineWithLineId:(NSNumber *)lineId{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSString *values = @"s.id as id, s.name as name, s.code as code, s.type as type, ss.pm1 as pm1, ss.pm2 as pm2, ss.pm3 as pm3, c.longitude1 as longitude1, c.latitude1 as latitude1, c.longitude2 as longitude2, c.latitude2 as latitude2, c.longitude3 as longitude3, c.latitude3 as latitude3 ,s.zid as zid";
     NSString *tables = @"station as s,stations as ss,coordinate as c";
     NSString *condition = [NSString stringWithFormat:@"s.id=ss.stationid and ss.id=c.stationsid and ss.lineid=%d",[lineId intValue]];
-    [self searchValues:values fromTable:tables where:condition handler:^(sqlite3_stmt *stmt) {
+    [self czw_searchValues:values fromTable:tables where:condition handler:^(sqlite3_stmt *stmt) {
         int stationId = sqlite3_column_int(stmt, 0);
         const char *stationName = sqlite3_column_blob(stmt, 1);
         const char *stationCode = sqlite3_column_blob(stmt, 2);
@@ -348,11 +189,11 @@
 }
 
 
-- (NSMutableArray *)czw_searchStationWithText:(NSString *)searchText{
+- (NSMutableArray *)searchStationWithText:(NSString *)searchText{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSString *uSearchText = [self textToSimplified:searchText];
     NSString *condition = [NSString stringWithFormat:@"name like '%%%@%%'",uSearchText];
-    [self searchValues:nil fromTable:@"station" where:condition groupBy:@"code" orderBy:nil limit:nil handler:^(sqlite3_stmt *stmt) {
+    [self czw_searchValues:nil fromTable:@"station" where:condition groupBy:@"code" orderBy:nil limit:nil handler:^(sqlite3_stmt *stmt) {
         int stationId = sqlite3_column_int(stmt, 0);
         const char *name = sqlite3_column_blob(stmt, 1);
         const char *pinyin = sqlite3_column_blob(stmt, 2);
@@ -376,14 +217,14 @@
             [resultArray addObject:dic];
         }
     }];
-#warning todo :排序&group by同名站点
+#warning todo :排序
     return resultArray;
 }
 
-- (NSMutableArray *)czw_searchStationWithPinyin:(NSString *)pinyin{
+- (NSMutableArray *)searchStationWithPinyin:(NSString *)pinyin{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSString *condition = [NSString stringWithFormat:@"pinyin like '%%%@%%'",pinyin];
-    [self searchValues:nil fromTable:@"station" where:condition groupBy:nil orderBy:nil limit:@"10" handler:^(sqlite3_stmt *stmt) {
+    [self czw_searchValues:nil fromTable:@"station" where:condition groupBy:nil orderBy:nil limit:@"10" handler:^(sqlite3_stmt *stmt) {
         int stationId = sqlite3_column_int(stmt, 0);
         const char *name = sqlite3_column_blob(stmt, 1);
         const char *pinyin = sqlite3_column_blob(stmt, 2);
@@ -410,7 +251,7 @@
     return resultArray;
 }
 
-- (NSMutableArray *)czw_searchLineViaStationWithZid:(NSNumber *)zid{
+- (NSMutableArray *)searchLineViaStationWithZid:(NSNumber *)zid{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     if (!zid) {
         return nil;
@@ -419,7 +260,7 @@
     NSString *values = @"distinct l.id as id,l.number as number,l.name as name,l.code as code,c.name as categoryname,l.type as type,o.time as time,o.fare as fare,o.note as note,o.lastupdate as lastupdate,cp.name as companyname,o.start as start,o.end as end";
     NSString *tables = @"station as s,stations as ss,lines as l,category as c,linesothers as o,company as cp";
     NSString *condition = [NSString stringWithFormat:@"s.id=ss.stationid and ss.lineid=l.id and l.categoryid=c.id and l.id=o.lineid and o.companyid=cp.id and s.zid=%d",[zid intValue]];
-    [self searchValues:values fromTable:tables where:condition groupBy:nil orderBy:@"l.number" handler:^(sqlite3_stmt *stmt) {
+    [self czw_searchValues:values fromTable:tables where:condition groupBy:nil orderBy:@"l.number" handler:^(sqlite3_stmt *stmt) {
         int lineId = sqlite3_column_int(stmt, 0);
         int lineNumber = sqlite3_column_int(stmt, 1);
         const char *lineName = sqlite3_column_blob(stmt, 2);

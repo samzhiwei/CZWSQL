@@ -18,7 +18,7 @@
     [super viewDidLoad];
     OffLineSQLLoader *loader = OffLineLoader;
     [loader configureDataBasePathWithCityPinyin:@"guangzhou"];
-    NSMutableArray *arr = [loader czw_searchLineViaStationWithZid:@59];
+    NSMutableArray *arr = [loader searchLineViaStationWithZid:@59];
     
     
     
@@ -30,7 +30,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(did:) name:@"did" object:nil];
 //    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
 //    NSBlockOperation *blockOp = [NSBlockOperation blockOperationWithBlock:^{
-        self.data = [loader czw_searchStationWithText:@"海珠"];
+        self.data = [loader searchStationWithText:@"海珠"];
 //        for (NSMutableDictionary *dic1 in _data) {
 //            NSNumber *zid = [dic1 objectForKey:@"zid"];
 //            NSMutableArray *list = [OffLineLoader czw_searchLineViaStationWithZid:zid];
