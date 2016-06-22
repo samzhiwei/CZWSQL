@@ -222,7 +222,7 @@
 }
 
 - (NSMutableArray *)searchStationWithPinyin:(NSString *)pinyin{
-    __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
+    NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSString *condition = [NSString stringWithFormat:@"pinyin like '%%%@%%'",pinyin];
     [self czw_searchValues:nil fromTable:@"station" where:condition groupBy:nil orderBy:nil limit:@"10" handler:^(sqlite3_stmt *stmt) {
         int stationId = sqlite3_column_int(stmt, 0);
@@ -260,6 +260,7 @@
     NSString *values = @"distinct l.id as id,l.number as number,l.name as name,l.code as code,c.name as categoryname,l.type as type,o.time as time,o.fare as fare,o.note as note,o.lastupdate as lastupdate,cp.name as companyname,o.start as start,o.end as end";
     NSString *tables = @"station as s,stations as ss,lines as l,category as c,linesothers as o,company as cp";
     NSString *condition = [NSString stringWithFormat:@"s.id=ss.stationid and ss.lineid=l.id and l.categoryid=c.id and l.id=o.lineid and o.companyid=cp.id and s.zid=%d",[zid intValue]];
+    
     [self czw_searchValues:values fromTable:tables where:condition groupBy:nil orderBy:@"l.number" handler:^(sqlite3_stmt *stmt) {
         int lineId = sqlite3_column_int(stmt, 0);
         int lineNumber = sqlite3_column_int(stmt, 1);
@@ -274,6 +275,11 @@
         const char *companyname = sqlite3_column_blob(stmt, 10);
         const char *start = sqlite3_column_blob(stmt, 11);//起始站
         const char *end = sqlite3_column_blob(stmt, 12);//终点站
+        
+        
+        const char *clonme = sqlite3_column_decltype(stmt,2);
+        NSString *coll = [NSString stringWithUTF8String:clonme];
+
         
         NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
         [dic setObject:[NSNumber numberWithInt:lineId] forKey:@"identification"];

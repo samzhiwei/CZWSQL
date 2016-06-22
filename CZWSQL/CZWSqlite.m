@@ -107,7 +107,7 @@
  *  搜索table
  */
 
-- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy limit:(NSString *)limit handler:(void (^)(sqlite3_stmt *stmt))handler{
+- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy limit:(NSString *)limit handler:(void (^)(NSMutableDictionary *))handler{
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     if ([self sqliteOpen]) {
         sqlite3_stmt *stmt;
@@ -118,14 +118,40 @@
         int ret2 = sqlite3_prepare_v2(_database, [selSql UTF8String], -1, &stmt, NULL);
         if (ret2 == SQLITE_OK) {
             while (sqlite3_step(stmt) == SQLITE_ROW) {//遍历
-                handler(stmt);
+                NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+                int count = sqlite3_column_count(stmt);
+                for (int i = 0; i < count; i ++) {
+                    int dataType = sqlite3_column_type(stmt,i);
+                    switch (dataType) {
+                        case SQLITE_INTEGER :{
+                            int lineId = sqlite3_column_int(stmt, i);
+                            dic setObject:[ forKey:<#(nonnull id<NSCopying>)#>
+                            break;
+                        }
+                        case SQLITE_BLOB :{
+                            
+                            break;
+                        }
+                        case SQLITE_TEXT :{
+                            
+                            break;
+                        }
+                        default:{
+                            NSLog(@"sql输出数据type不能识别");
+                            
+                            break;
+                        }
+                    }
+                }
+                
+                handler(dic);
             }
         } else{
             NSLog(@"table打开失败:%s",sqlite3_errmsg(_database));
         }
         sqlite3_finalize(stmt);
         [self sqliteClose];
-        NSLog(@"sqlite库用时:%f",CFAbsoluteTimeGetCurrent() - startTime);
+        NSLog(@"sqlite搜索库用时:%f",CFAbsoluteTimeGetCurrent() - startTime);
     } else {
         handler(NULL);
     }

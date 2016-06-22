@@ -27,6 +27,7 @@
 /* Begin PBXFileReference section */
 		510FFC7E1D179D520073CE64 /* CZWSqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CZWSqlite.h; sourceTree = "<group>"; };
 		510FFC7F1D179D520073CE64 /* CZWSqlite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CZWSqlite.m; sourceTree = "<group>"; };
+		510FFC811D1A6ABE0073CE64 /* CZWSQL.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CZWSQL.entitlements; sourceTree = "<group>"; };
 		51111CBB1D0D3F70005C4166 /* OffLineSQLLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OffLineSQLLoader.h; sourceTree = "<group>"; };
 		51111CBC1D0D3F70005C4166 /* OffLineSQLLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OffLineSQLLoader.m; sourceTree = "<group>"; };
 		51111CBF1D0D42C2005C4166 /* big5.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = big5.txt; sourceTree = "<group>"; };
@@ -96,6 +97,7 @@
 		51AE3CC91D0D3EDD00B27EFB /* CZWSQL */ = {
 			isa = PBXGroup;
 			children = (
+				510FFC811D1A6ABE0073CE64 /* CZWSQL.entitlements */,
 				51AE3CCD1D0D3EDD00B27EFB /* AppDelegate.h */,
 				51AE3CCE1D0D3EDD00B27EFB /* AppDelegate.m */,
 				51AE3CD01D0D3EDD00B27EFB /* ViewController.h */,
@@ -157,6 +159,12 @@
 				TargetAttributes = {
 					51AE3CC61D0D3EDD00B27EFB = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = CNRUE2U4HA;
+						SystemCapabilities = {
+							com.apple.OMC = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -317,6 +325,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CZWSQL/CZWSQL.entitlements;
 				INFOPLIST_FILE = CZWSQL/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tianqu.CZWSQL;
@@ -328,6 +337,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CZWSQL/CZWSQL.entitlements;
 				INFOPLIST_FILE = CZWSQL/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tianqu.CZWSQL;

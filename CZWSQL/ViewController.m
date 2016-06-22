@@ -19,18 +19,18 @@
     OffLineSQLLoader *loader = OffLineLoader;
     [loader configureDataBasePathWithCityPinyin:@"guangzhou"];
     NSMutableArray *arr = [loader searchLineViaStationWithZid:@59];
+    NSLog(@"%p",arr);
     
     
-    
-    self.tableView = [[UITableView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.backgroundColor = [UIColor yellowColor];
-    [self.view addSubview:self.tableView];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(did:) name:@"did" object:nil];
-//    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-//    NSBlockOperation *blockOp = [NSBlockOperation blockOperationWithBlock:^{
-        self.data = [loader searchStationWithText:@"海珠"];
+//    self.tableView = [[UITableView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+//    self.tableView.delegate = self;
+//    self.tableView.dataSource = self;
+//    self.tableView.backgroundColor = [UIColor yellowColor];
+//    [self.view addSubview:self.tableView];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(did:) name:@"did" object:nil];
+////    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+////    NSBlockOperation *blockOp = [NSBlockOperation blockOperationWithBlock:^{
+//        self.data = [loader searchStationWithText:@"海珠"];
 //        for (NSMutableDictionary *dic1 in _data) {
 //            NSNumber *zid = [dic1 objectForKey:@"zid"];
 //            NSMutableArray *list = [OffLineLoader czw_searchLineViaStationWithZid:zid];

@@ -9,9 +9,19 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>dasdad.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>510FFC851D1A6DFF0073CE64</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>51AE3CC61D0D3EDD00B27EFB</key>
 		<dict>
 			<key>primary</key>
