@@ -16,10 +16,13 @@
 - (SqlQueryStringMaker *(^)(NSString *))groupBy;
 - (SqlQueryStringMaker *(^)(NSString *))orderBy;
 - (SqlQueryStringMaker *(^)(NSString *))limit;
+- (SqlQueryStringMaker *(^)(NSString *))value;
+- (SqlQueryStringMaker *(^)(NSString *))as;
 @end
 
 @interface NSString (czw_splicingSqlQueryString)
 + (NSString *)makeSqlQueryString:(void (^)(SqlQueryStringMaker *makeQS))splicing;
++ (NSString *)makeSqlQueryString_value:(void (^)(SqlQueryStringMaker *makeQS_value))splicing;
 @end
 @interface CZWSqlite : NSObject
 @property (copy, nonatomic) NSString *currentDataBasePath;
@@ -28,15 +31,15 @@
 
 - (NSString *)textToSimplified:(NSString *)text;
 
-- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy limit:(NSString *)limit handler:(void (^)(NSMutableDictionary *))handler;
+- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy limit:(NSString *)limit handler:(void (^)(NSMutableDictionary *mDic))handler;
 
-- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy handler:(void (^)(sqlite3_stmt *stmt))handler;
+- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy handler:(void (^)(NSMutableDictionary *))handler;
 
-- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy handler:(void (^)(sqlite3_stmt *stmt))handler;
+- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy handler:(void (^)(NSMutableDictionary *))handler;
 
-- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition handler:(void (^)(sqlite3_stmt *stmt))handler;
+- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition handler:(void (^)(NSMutableDictionary *))handler;
 
-- (void)czw_searchTable:(NSString *)table where:(NSString *)condition handler:(void (^)(sqlite3_stmt *stmt))handler;
+- (void)czw_searchTable:(NSString *)table where:(NSString *)condition handler:(void (^)(NSMutableDictionary *))handler;
 
-- (void)czw_searchTable:(NSString *)table handler:(void (^)(sqlite3_stmt *stmt))handler;
+- (void)czw_searchTable:(NSString *)table handler:(void (^)(NSMutableDictionary *))handler;
 @end

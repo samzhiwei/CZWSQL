@@ -18,7 +18,10 @@
     [super viewDidLoad];
     OffLineSQLLoader *loader = OffLineLoader;
     [loader configureDataBasePathWithCityPinyin:@"guangzhou"];
+    NSMutableArray *da = [loader searchStationInLineWithLineId:@15];
+    
     NSMutableArray *arr = [loader searchLineViaStationWithZid:@59];
+    NSMutableArray *arr2 = [loader searchStationWithPinyin:@"dongxiaonan"];
     NSLog(@"%p",arr);
     
     

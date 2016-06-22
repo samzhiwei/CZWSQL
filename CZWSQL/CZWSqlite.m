@@ -16,9 +16,9 @@
 - (SqlQueryStringMaker *(^)(NSString *))select{
     return ^SqlQueryStringMaker *(NSString *values){
         if (values) {
-            self.result = [self.result stringByAppendingFormat:@"%@ ",values];
+            self.result = [self.result stringByAppendingFormat:@"SELECT %@ ",values];
         } else {
-            self.result = [self.result stringByAppendingFormat:@"* "];
+            self.result = [self.result stringByAppendingFormat:@"SELECT * "];
         }
         return self;
     };
@@ -71,9 +71,50 @@
     };
 }
 
+- (SqlQueryStringMaker *(^)(NSString *))value{
+    return ^SqlQueryStringMaker *(NSString *value){
+        if (value) {
+            self.result = [self.result stringByAppendingFormat:@"%@ ",value];
+        }
+        return self;
+    };
+}
+
+- (SqlQueryStringMaker *(^)(NSString *))as{
+    return ^SqlQueryStringMaker *(NSString *as){
+        if (as) {
+            self.result = [self.result stringByAppendingFormat:@"as %@,",as];
+        }
+        return self;
+    };
+}
+
 @end
 
+@implementation NSString (czw_splicingSqlQueryString)
 
++ (NSString *)makeSqlQueryString:(void (^)(SqlQueryStringMaker *makeQS))splicing
+{
+    SqlQueryStringMaker *maker = [[SqlQueryStringMaker alloc]init];
+    maker.result = [[NSString alloc]init];
+    splicing(maker);
+    return maker.result;
+}
++ (NSString *)makeSqlQueryString_value:(void (^)(SqlQueryStringMaker *makeQS_value))splicing
+{
+    SqlQueryStringMaker *maker = [[SqlQueryStringMaker alloc]init];
+    maker.result = [[NSString alloc]init];
+    splicing(maker);
+    NSString *str = [maker.result substringFromIndex:(maker.result.length-1)];
+    if ([[maker.result substringFromIndex:(maker.result.length-1)] isEqualToString:@","]) {
+        maker.result
+        NSString *da =
+        [maker.result substringWithRange:NSMakeRange((maker.result.length - 2), 2)];
+        [maker.result stringByReplacingCharactersInRange:NSMakeRange((maker.result.length - 2), 2) withString:@" "];
+    }
+    return maker.result;
+}
+@end
 
 
 @implementation CZWSqlite
@@ -82,7 +123,7 @@
 
 - (BOOL)sqliteOpen{
     if (sqlite3_open([self.currentDataBasePath UTF8String], &_database) == SQLITE_OK) {
-        //NSLog(@"sqliteOpen成功->path:%@",self.currentDataBasePath);
+        NSLog(@"sqliteOpen成功->path:%@",self.currentDataBasePath);
         return YES;
     } else {
         NSLog(@"sqliteOpen打开失败:%s",sqlite3_errmsg(_database));
@@ -92,7 +133,7 @@
 
 - (BOOL)sqliteClose{
     if (sqlite3_close(_database) == SQLITE_OK) {
-        //NSLog(@"sqliteClose成功->path:%@",self.currentDataBasePath);
+        NSLog(@"sqliteClose成功->path:%@",self.currentDataBasePath);
         return YES;
     } else {
         NSLog(@"sqliteClose打开失败:%s",sqlite3_errmsg(_database));
@@ -122,18 +163,36 @@
                 int count = sqlite3_column_count(stmt);
                 for (int i = 0; i < count; i ++) {
                     int dataType = sqlite3_column_type(stmt,i);
+                    const char *columnName = sqlite3_column_name(stmt,i);
+                    NSString *keyName = [NSString stringWithUTF8String:columnName];
                     switch (dataType) {
                         case SQLITE_INTEGER :{
-                            int lineId = sqlite3_column_int(stmt, i);
-                            dic setObject:[ forKey:<#(nonnull id<NSCopying>)#>
+                            int inter = sqlite3_column_int(stmt, i);
+                            [dic setObject:[NSNumber numberWithInt:inter] forKey:keyName];
                             break;
                         }
                         case SQLITE_BLOB :{
-                            
+                            NSLog(@"sql输出数据为blob类型，待完成");
                             break;
                         }
                         case SQLITE_TEXT :{
-                            
+                            const char *text = (const char*)sqlite3_column_text(stmt, i);
+                            NSString *textStr = nil;
+                            if (text) {
+                                textStr = [NSString stringWithUTF8String:text];
+                            } else {
+                                textStr = @"Not a valid string";
+                            }
+                            [dic setObject:textStr forKey:keyName];
+                            break;
+                        }
+                        case SQLITE_FLOAT: {
+                            double floater = sqlite3_column_double(stmt, i);
+                            [dic setObject:[NSNumber numberWithDouble:floater] forKey:keyName];
+                            break;
+                        }
+                        case SQLITE_NULL :{
+                            NSLog(@"sql输出数据为空,待完成");
                             break;
                         }
                         default:{
@@ -158,33 +217,33 @@
     
 }
 
-- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy handler:(void (^)(sqlite3_stmt *stmt))handler{
-    [self czw_searchValues:values fromTable:table where:condition groupBy:groupBy orderBy:orderBy limit:nil handler:^(sqlite3_stmt *stmt) {
-        handler(stmt);
+- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy handler:(void (^)(NSMutableDictionary *))handler{
+    [self czw_searchValues:values fromTable:table where:condition groupBy:groupBy orderBy:orderBy limit:nil handler:^(NSMutableDictionary *mDic) {
+        handler(mDic);
     }];
 }
 
-- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy handler:(void (^)(sqlite3_stmt *stmt))handler{
-    [self czw_searchValues:values fromTable:table where:condition groupBy:groupBy orderBy:nil handler:^(sqlite3_stmt *stmt) {
-        handler(stmt);
+- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy handler:(void (^)(NSMutableDictionary *))handler{
+    [self czw_searchValues:values fromTable:table where:condition groupBy:groupBy orderBy:nil handler:^(NSMutableDictionary *mDic) {
+        handler(mDic);
     }];
 }
 
-- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition handler:(void (^)(sqlite3_stmt *stmt))handler{
-    [self czw_searchValues:values fromTable:table where:condition groupBy:nil handler:^(sqlite3_stmt *stmt) {
-        handler(stmt);
+- (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition handler:(void (^)(NSMutableDictionary *))handler{
+    [self czw_searchValues:values fromTable:table where:condition groupBy:nil handler:^(NSMutableDictionary *mDic) {
+        handler(mDic);
     }];
 }
 
-- (void)czw_searchTable:(NSString *)table where:(NSString *)condition handler:(void (^)(sqlite3_stmt *stmt))handler{
-    [self czw_searchValues:nil fromTable:table where:condition handler:^(sqlite3_stmt *stmt) {
-        handler(stmt);
+- (void)czw_searchTable:(NSString *)table where:(NSString *)condition handler:(void (^)(NSMutableDictionary *))handler{
+    [self czw_searchValues:nil fromTable:table where:condition handler:^(NSMutableDictionary *mDic) {
+        handler(mDic);
     }];
 }
 
-- (void)czw_searchTable:(NSString *)table handler:(void (^)(sqlite3_stmt *stmt))handler{
-    [self czw_searchTable:table where:nil handler:^(sqlite3_stmt *stmt) {
-        handler(stmt);
+- (void)czw_searchTable:(NSString *)table handler:(void (^)(NSMutableDictionary *))handler{
+    [self czw_searchTable:table where:nil handler:^(NSMutableDictionary *mDic) {
+        handler(mDic);
     }];
 }
 
