@@ -11,7 +11,6 @@
 #import <sqlite3.h>
 
 
-
 @interface OffLineSQLLoader ()
 @end
 @implementation OffLineSQLLoader
@@ -48,8 +47,7 @@
 - (NSMutableArray *)searchAllLineCategory{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     
-    [self czw_searchValues:@"id,name" fromTable:@"category" where:nil handler:^(NSMutableDictionary *mDic) {
-
+    [self czw_searchValues:@"id as identification,name" fromTable:@"category" where:nil handler:^(NSMutableDictionary *mDic) {
         [resultArray addObject:mDic];
     }];
     
@@ -59,7 +57,7 @@
 - (NSMutableArray *)searchLineWithCategoryId:(NSNumber *)categoryId{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSString *condition = [NSString stringWithFormat:@"categoryid = %d",[categoryId intValue]];
-    [self czw_searchValues:@"name ,code ,id" fromTable:@"lines" where:condition groupBy:nil orderBy:@"number" handler:^(NSMutableDictionary *mDic) {
+    [self czw_searchValues:@"name ,code ,id as identification" fromTable:@"lines" where:condition groupBy:nil orderBy:@"number" handler:^(NSMutableDictionary *mDic) {
         [resultArray addObject:mDic];
     }];
     return resultArray;
@@ -67,10 +65,34 @@
 
 - (NSMutableArray *)searchLineWithLineCode:(NSString *)lineCode{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
-    NSString *values = [NSString stringWithFormat:@"l.name ,l.code ,l.number ,lo.time,lo.lastupdate,lo.start,lo.end ,c.name ,lo.note ,lo.fare"];
-    NSString *tables = [NSString stringWithFormat:@"lines as l ,linesothers as lo,company as c"];
-    NSString *condition = [NSString stringWithFormat:@"lo.companyid = c.id AND l.id = lo.lineid AND l.code = '%@'",lineCode];
-    [self czw_searchValues:values fromTable:tables where:condition handler:^(NSMutableDictionary *mDic) {
+    NSString *values = [NSString makeSqlQueryString_value:^(SqlQueryStringValueMaker *make) {
+        make.value(@"l.id").as(@"identification").
+        value(@"l.name").as(@"name").
+        value(@"l.code").as(@"code").
+        value(@"l.number").as(@"number").
+        value(@"l.type").as(@"type").
+        value(@"lo.time").as(@"serviceTime").
+        value(@"lo.lastupdate").as(@"lastUpdate").
+        value(@"lo.start").as(@"starting").
+        value(@"lo.end").as(@"terminal").
+        value(@"c.name").as(@"companyName").
+        value(@"lo.note").as(@"note").
+        value(@"lo.fare").as(@"fare");
+    }];
+    NSString *tables = [NSString makeSqlQueryString_table:^(SqlQueryStringTableMaker *make) {
+        make.table(@"lines").as(@"l").
+        table(@"linesothers").as(@"lo").
+        table(@"company").as(@"c");
+    }];
+    NSString *conditions = [NSString makeSqlQueryString_condition:^(SqlQueryStringConditionMaker *make) {
+        NSString *code = [NSString stringWithFormat:@"'%@'",lineCode];
+        NSLog(@"code = %p",code);
+        make.value(@"lo.companyid").equalTo(@"c.id").also.
+        value(@"l.id").equalTo(@"lo.lineid").also.
+        value(@"l.code").equalTo(code);
+    }];
+    
+    [self czw_searchValues:values fromTable:tables where:conditions handler:^(NSMutableDictionary *mDic) {
         [resultArray addObject:mDic];
     }];
     return resultArray;
@@ -81,31 +103,45 @@
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSString *uSearchText = [self textToSimplified:searchText];
     NSString *condition = [NSString stringWithFormat:@"name like '%%%@%%'",uSearchText];
-    [self czw_searchValues:@"name,code,id" fromTable:@"lines" where:condition groupBy:nil orderBy:@"number" handler:^(NSMutableDictionary *mDic) {
+    [self czw_searchValues:@"name,code,id as identification" fromTable:@"lines" where:condition groupBy:nil orderBy:@"number" handler:^(NSMutableDictionary *mDic) {
         [resultArray addObject:mDic];
     }];
-    
-#warning todo:排序
     return resultArray;
 }
 
 - (NSMutableArray *)searchStationInLineWithLineId:(NSNumber *)lineId{
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
-    NSString *str = [NSString makeSqlQueryString_value:^(SqlQueryStringMaker *m) {
-        m.value(@"s.id").as(@"id").
+    NSString *values = [NSString makeSqlQueryString_value:^(SqlQueryStringValueMaker *m) {
+        m.value(@"s.id").as(@"identification").
         value(@"s.name").as(@"name").
         value(@"s.code").as(@"code").
         value(@"s.type").as(@"type").
-        value(@"ss.pm1").as(@"pm1");
+        value(@"ss.pm1").as(@"pm1").
+        value(@"ss.pm2").as(@"pm2").
+        value(@"ss.pm3").as(@"pm3").
+        value(@"c.longitude1").as(@"longitude1").
+        value(@"c.latitude1").as(@"latitude1").
+        value(@"c.longitude2").as(@"longitude2").
+        value(@"c.latitude2").as(@"latitude2").
+        value(@"c.longitude3").as(@"longitude3").
+        value(@"c.latitude3").as(@"latitude3").
+        value(@"s.zid").as(@"zid");
     }];
-    NSString *values = @"s.id as id, s.name as name, s.code as code, s.type as type, ss.pm1 as pm1, ss.pm2 as pm2, ss.pm3 as pm3, c.longitude1 as longitude1, c.latitude1 as latitude1, c.longitude2 as longitude2, c.latitude2 as latitude2, c.longitude3 as longitude3, c.latitude3 as latitude3 ,s.zid as zid";
-    NSString *tables = @"station as s,stations as ss,coordinate as c";
-    NSString *condition = [NSString stringWithFormat:@"s.id=ss.stationid and ss.id=c.stationsid and ss.lineid=%d",[lineId intValue]];
-    [self czw_searchValues:values fromTable:tables where:condition handler:^(NSMutableDictionary *mDic) {
-        
+    NSString *tables = [NSString makeSqlQueryString_table:^(SqlQueryStringTableMaker *make) {
+        make.table(@"station").as(@"s").
+        table(@"stations").as(@"ss").
+        table(@"coordinate").as(@"c");
+    }];
+    NSString *conditions = [NSString makeSqlQueryString_condition:^(SqlQueryStringConditionMaker *make) {
+        NSString *sslineId = [NSString stringWithFormat:@"%d",[lineId intValue]];
+        NSLog(@"sslineId = %p",sslineId);
+        make.value(@"s.id").equalTo(@"ss.stationid").also.
+        value(@"ss.id").equalTo(@"c.stationsid").also.
+        value(@"ss.lineid").equalTo(sslineId);
+    }];
+    [self czw_searchValues:values fromTable:tables where:conditions handler:^(NSMutableDictionary *mDic) {
         [resultArray addObject:mDic];
     }];
-    
     return resultArray;
 }
 
@@ -114,11 +150,10 @@
     __block NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSString *uSearchText = [self textToSimplified:searchText];
     NSString *condition = [NSString stringWithFormat:@"name like '%%%@%%'",uSearchText];
+#warning todo:改id名
     [self czw_searchValues:nil fromTable:@"station" where:condition groupBy:@"code" orderBy:nil limit:nil handler:^(NSMutableDictionary *mDic) {
         [resultArray addObject:mDic];
-        
     }];
-#warning todo :排序
     return resultArray;
 }
 
@@ -136,14 +171,53 @@
     if (!zid) {
         return nil;
     }
-    NSString *values = @"distinct l.id as identification,l.number as number,l.name as name,l.code as code,c.name as categoryName,l.type as type,o.time as serviceTime,o.fare as fare,o.note as note,o.lastupdate as lastUpDate,cp.name as companyName,o.start as starting,o.end as terminal";
-    NSString *tables = @"station as s,stations as ss,lines as l,category as c,linesothers as o,company as cp";
-    NSString *condition = [NSString stringWithFormat:@"s.id=ss.stationid and ss.lineid=l.id and l.categoryid=c.id and l.id=o.lineid and o.companyid=cp.id and s.zid=%d",[zid intValue]];
+    NSString *values = [NSString makeSqlQueryString_value:^(SqlQueryStringValueMaker *make) {
+        make.value(@"distinct l.id").as(@"identification").
+        value(@"l.number").as(@"number").
+        value(@"l.name").as(@"name").
+        value(@"l.code").as(@"code").
+   /*     value(@"c.name").as(@"categoryName").    */
+        value(@"l.type").as(@"type").
+        value(@"o.time").as(@"serviceTime").
+        value(@"o.fare").as(@"fare").
+        value(@"o.note").as(@"note").
+        value(@"o.lastupdate").as(@"lastUpDate").
+        value(@"cp.name").as(@"companyName").
+        value(@"o.start").as(@"starting").
+        value(@"o.end").as(@"terminal");
+    }];
+    NSString *tables = [NSString makeSqlQueryString_table:^(SqlQueryStringTableMaker *make) {
+        make.table(@"station").as(@"s").
+        table(@"stations").as(@"ss").
+        table(@"lines").as(@"l").
+        table(@"category").as(@"c").
+        table(@"linesothers").as(@"o").
+        table(@"company").as(@"cp");
+    }];
+    NSString *conditions = [NSString makeSqlQueryString_condition:^(SqlQueryStringConditionMaker *make) {
+        NSString *szid = [NSString stringWithFormat:@"%d",[zid intValue]];
+        NSLog(@"sizd = %p",szid);
+        make.value(@"s.id").equalTo(@"ss.stationid").also.
+        value(@"ss.lineid").equalTo(@"l.id").also.
+        value(@"l.categoryid").equalTo(@"c.id").also.
+        value(@"l.id").equalTo(@"o.lineid").also.
+        value(@"o.companyid").equalTo(@"cp.id").also.
+        value(@"s.zid").equalTo(szid);
+    }];
     
-    [self czw_searchValues:values fromTable:tables where:condition groupBy:nil orderBy:@"l.number" handler:^(NSMutableDictionary *mDic) {
+    [self czw_searchValues:values fromTable:tables where:conditions groupBy:nil orderBy:@"l.number" handler:^(NSMutableDictionary *mDic) {
         [resultArray addObject:mDic];
     }];
     return resultArray;
+}
+
+/**
+ *  繁体转简体;
+ */
+
+- (NSString *)textToSimplified:(NSString *)text{
+    convertGB_BIG *convertGbToBig = [[convertGB_BIG alloc] init];
+    return [convertGbToBig big5ToGb:[text uppercaseString]];
 }
 
 @end

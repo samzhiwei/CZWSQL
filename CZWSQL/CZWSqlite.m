@@ -7,14 +7,24 @@
 //
 
 #import "CZWSqlite.h"
-#import "convertGB_BIG.h"
-@implementation SqlQueryStringMaker
+
+
+@implementation SqlQueryStringBaseMaker
+- (NSString *)result{
+    if (!_result) {
+        _result = [[NSString alloc]init];
+    }
+    return _result;
+}
+@end
+
+@implementation SqlQueryStringStatementMaker
 
 /**
  *  拼语句
  */
-- (SqlQueryStringMaker *(^)(NSString *))select{
-    return ^SqlQueryStringMaker *(NSString *values){
+- (SqlQueryStringStatementMaker *(^)(NSString *))select{
+    return ^SqlQueryStringStatementMaker *(NSString *values){
         if (values) {
             self.result = [self.result stringByAppendingFormat:@"SELECT %@ ",values];
         } else {
@@ -24,8 +34,8 @@
     };
 }
 
-- (SqlQueryStringMaker *(^)(NSString *))from{
-    return ^SqlQueryStringMaker *( NSString *tables){
+- (SqlQueryStringStatementMaker *(^)(NSString *))from{
+    return ^SqlQueryStringStatementMaker *( NSString *tables){
         if (tables) {
             self.result = [self.result stringByAppendingFormat:@"FROM %@ ",tables];
         } else {
@@ -35,8 +45,8 @@
     };
 }
 
-- (SqlQueryStringMaker *(^)(NSString *))where{
-    return ^SqlQueryStringMaker *(NSString *where){
+- (SqlQueryStringStatementMaker *(^)(NSString *))where{
+    return ^SqlQueryStringStatementMaker *(NSString *where){
         if (where) {
             self.result = [self.result stringByAppendingFormat:@"WHERE %@ ",where];
         }
@@ -44,8 +54,8 @@
     };
 }
 
-- (SqlQueryStringMaker *(^)(NSString *))groupBy{
-    return ^SqlQueryStringMaker *(NSString *groupBy){
+- (SqlQueryStringStatementMaker *(^)(NSString *))groupBy{
+    return ^SqlQueryStringStatementMaker *(NSString *groupBy){
         if (groupBy) {
             self.result = [self.result stringByAppendingFormat:@"GROUP BY %@ ",groupBy];
         }
@@ -53,8 +63,8 @@
     };
 }
 
-- (SqlQueryStringMaker *(^)(NSString *))orderBy{
-    return ^SqlQueryStringMaker *(NSString *orderBy){
+- (SqlQueryStringStatementMaker *(^)(NSString *))orderBy{
+    return ^SqlQueryStringStatementMaker *(NSString *orderBy){
         if (orderBy) {
             self.result = [self.result stringByAppendingFormat:@"ORDER BY %@ ",orderBy];
         }
@@ -62,8 +72,8 @@
     };
 }
 
-- (SqlQueryStringMaker *(^)(NSString *))limit{
-    return ^SqlQueryStringMaker *(NSString *limit){
+- (SqlQueryStringStatementMaker *(^)(NSString *))limit{
+    return ^SqlQueryStringStatementMaker *(NSString *limit){
         if (limit) {
             self.result = [self.result stringByAppendingFormat:@"LIMIT %@ ",limit];
         }
@@ -71,17 +81,20 @@
     };
 }
 
-- (SqlQueryStringMaker *(^)(NSString *))value{
-    return ^SqlQueryStringMaker *(NSString *value){
+
+
+@end
+@implementation SqlQueryStringValueMaker
+- (SqlQueryStringValueMaker *(^)(NSString *))value{
+    return ^SqlQueryStringValueMaker *(NSString *value){
         if (value) {
             self.result = [self.result stringByAppendingFormat:@"%@ ",value];
         }
         return self;
     };
 }
-
-- (SqlQueryStringMaker *(^)(NSString *))as{
-    return ^SqlQueryStringMaker *(NSString *as){
+- (SqlQueryStringValueMaker *(^)(NSString *))as{
+    return ^SqlQueryStringValueMaker *(NSString *as){
         if (as) {
             self.result = [self.result stringByAppendingFormat:@"as %@,",as];
         }
@@ -91,26 +104,132 @@
 
 @end
 
-@implementation NSString (czw_splicingSqlQueryString)
+@implementation SqlQueryStringTableMaker
 
-+ (NSString *)makeSqlQueryString:(void (^)(SqlQueryStringMaker *makeQS))splicing
+- (SqlQueryStringTableMaker *(^)(NSString *))table{
+    return ^SqlQueryStringTableMaker *(NSString *table){
+        if (table) {
+            self.result = [self.result stringByAppendingFormat:@"%@ ",table];
+        }
+        return self;
+    };
+}
+
+- (SqlQueryStringTableMaker *(^)(NSString *))as{
+    return ^SqlQueryStringTableMaker *(NSString *as){
+        if (as) {
+            self.result = [self.result stringByAppendingFormat:@"as %@,",as];
+        }
+        return self;
+    };
+}
+
+@end
+
+@implementation SqlQueryStringConditionMaker
+- (SqlQueryStringConditionMaker *(^)(NSString *))value{
+    return ^SqlQueryStringConditionMaker *(NSString *value){
+        if (value) {
+            self.result = [self.result stringByAppendingFormat:@"%@ ",value];
+        }
+        return self;
+    };
+}
+- (SqlQueryStringConditionMaker *)also{
+    self.result = [self.result stringByAppendingString:@"AND "];
+    return  self;
+}
+- (SqlQueryStringConditionMaker *)either{
+    self.result = [self.result stringByAppendingString:@"OR "];
+    return self;
+}
+
+- (SqlQueryStringConditionMaker *(^)(NSString *))equalTo{
+    return ^SqlQueryStringConditionMaker *(NSString *equalTo){
+        if (equalTo) {
+            self.result = [self.result stringByAppendingFormat:@"= %@ ",equalTo];
+        }
+        return self;
+    };
+}
+- (SqlQueryStringConditionMaker *(^)(NSString *))unequalTo{
+    return ^SqlQueryStringConditionMaker *(NSString *unequalTo){
+        if (unequalTo) {
+            self.result = [self.result stringByAppendingFormat:@"<> %@ ",unequalTo];
+        }
+        return self;
+    };
+}
+- (SqlQueryStringConditionMaker *(^)(NSString *))greaterThan{
+    return ^SqlQueryStringConditionMaker *(NSString *greaterThan){
+        if (greaterThan) {
+            self.result = [self.result stringByAppendingFormat:@"> %@ ",greaterThan];
+        }
+        return self;
+    };
+}
+- (SqlQueryStringConditionMaker *(^)(NSString *))lessThan{
+    return ^SqlQueryStringConditionMaker *(NSString *lessThan){
+        if (lessThan) {
+            self.result = [self.result stringByAppendingFormat:@"< %@ ",lessThan];
+        }
+        return self;
+    };
+}
+- (SqlQueryStringConditionMaker *(^)(NSString *))between{
+    return ^SqlQueryStringConditionMaker *(NSString *between){
+        if (between) {
+            self.result = [self.result stringByAppendingFormat:@"BETWEEN %@ ",between];
+        }
+        return self;
+    };
+}
+- (SqlQueryStringConditionMaker *(^)(NSString *))like{
+    return ^SqlQueryStringConditionMaker *(NSString *like){
+        if (like) {
+            self.result = [self.result stringByAppendingFormat:@"LIKE %@ ",like];
+        }
+        return self;
+    };
+}
+
+@end
+
+
+@implementation NSString (czw_splicingSqlQueryString)
++ (NSString *)makeSqlQueryString_statement:(void (^)(SqlQueryStringStatementMaker *makeQS))splicing
 {
-    SqlQueryStringMaker *maker = [[SqlQueryStringMaker alloc]init];
-    maker.result = [[NSString alloc]init];
+    SqlQueryStringStatementMaker *maker = [[SqlQueryStringStatementMaker alloc]init];
     splicing(maker);
     return maker.result;
 }
-+ (NSString *)makeSqlQueryString_value:(void (^)(SqlQueryStringMaker *makeQS_value))splicing
+
++ (NSString *)makeSqlQueryString_value:(void (^)(SqlQueryStringValueMaker *makeQS_value))splicing
 {
-    SqlQueryStringMaker *maker = [[SqlQueryStringMaker alloc]init];
-    maker.result = [[NSString alloc]init];
+    SqlQueryStringValueMaker *maker = [[SqlQueryStringValueMaker alloc]init];
     splicing(maker);
-    NSString *str = [maker.result substringFromIndex:(maker.result.length-1)];
     if ([[maker.result substringFromIndex:(maker.result.length-1)] isEqualToString:@","]) {
-        maker.result
-        NSString *da =
-        [maker.result substringWithRange:NSMakeRange((maker.result.length - 2), 2)];
-        [maker.result stringByReplacingCharactersInRange:NSMakeRange((maker.result.length - 2), 2) withString:@" "];
+        maker.result = [maker.result stringByReplacingCharactersInRange:NSMakeRange((maker.result.length - 1), 1) withString:@" "];
+    }
+    return maker.result;
+}
+
++ (NSString *)makeSqlQueryString_table:(void (^)(SqlQueryStringTableMaker *makeQS_table))splicing
+{
+    SqlQueryStringTableMaker *maker = [[SqlQueryStringTableMaker alloc]init];
+    splicing(maker);
+    if ([[maker.result substringFromIndex:(maker.result.length-1)] isEqualToString:@","]) {
+        maker.result = [maker.result stringByReplacingCharactersInRange:NSMakeRange((maker.result.length - 1), 1) withString:@" "];
+    }
+    return maker.result;
+}
+
++ (NSString *)makeSqlQueryString_condition:(void (^)(SqlQueryStringConditionMaker *makeQS_condition))splicing
+{
+    SqlQueryStringConditionMaker *maker = [[SqlQueryStringConditionMaker alloc]init];
+    splicing(maker);
+    if ([[maker.result substringFromIndex:(maker.result.length-1)] isEqualToString:@","]) {
+        maker.result = [maker.result stringByReplacingCharactersInRange:NSMakeRange((maker.result.length - 1), 1) withString:@" "];
     }
     return maker.result;
 }
@@ -123,7 +242,7 @@
 
 - (BOOL)sqliteOpen{
     if (sqlite3_open([self.currentDataBasePath UTF8String], &_database) == SQLITE_OK) {
-        NSLog(@"sqliteOpen成功->path:%@",self.currentDataBasePath);
+        //NSLog(@"sqliteOpen成功->path:%@",self.currentDataBasePath);
         return YES;
     } else {
         NSLog(@"sqliteOpen打开失败:%s",sqlite3_errmsg(_database));
@@ -133,7 +252,7 @@
 
 - (BOOL)sqliteClose{
     if (sqlite3_close(_database) == SQLITE_OK) {
-        NSLog(@"sqliteClose成功->path:%@",self.currentDataBasePath);
+        //NSLog(@"sqliteClose成功->path:%@",self.currentDataBasePath);
         return YES;
     } else {
         NSLog(@"sqliteClose打开失败:%s",sqlite3_errmsg(_database));
@@ -146,16 +265,17 @@
 
 /**
  *  搜索table
+ *  values = nil就是显示全部
  */
 
 - (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy limit:(NSString *)limit handler:(void (^)(NSMutableDictionary *))handler{
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     if ([self sqliteOpen]) {
         sqlite3_stmt *stmt;
-        NSString *selSql = [NSString makeSqlQueryString:^(SqlQueryStringMaker *makeQS) {
-            makeQS.select(values).from(table).where(condition).groupBy(groupBy).orderBy(orderBy).limit(limit);
+        NSString *selSql = [NSString makeSqlQueryString_statement:^(SqlQueryStringStatementMaker *make) {
+            make.select(values).from(table).where(condition).groupBy(groupBy).orderBy(orderBy).limit(limit);
         }];
-        NSLog(@"Sql搜索语句 = %@",selSql);
+        //NSLog(@"Sql搜索语句 = %@",selSql);
         int ret2 = sqlite3_prepare_v2(_database, [selSql UTF8String], -1, &stmt, NULL);
         if (ret2 == SQLITE_OK) {
             while (sqlite3_step(stmt) == SQLITE_ROW) {//遍历
@@ -214,7 +334,6 @@
     } else {
         handler(NULL);
     }
-    
 }
 
 - (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy handler:(void (^)(NSMutableDictionary *))handler{
@@ -245,14 +364,5 @@
     [self czw_searchTable:table where:nil handler:^(NSMutableDictionary *mDic) {
         handler(mDic);
     }];
-}
-
-/**
- *  繁体转简体;
- */
-
-- (NSString *)textToSimplified:(NSString *)text{
-    convertGB_BIG *convertGbToBig = [[convertGB_BIG alloc] init];
-    return [convertGbToBig big5ToGb:[text uppercaseString]];
 }
 @end

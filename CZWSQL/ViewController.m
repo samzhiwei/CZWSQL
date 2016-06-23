@@ -18,12 +18,20 @@
     [super viewDidLoad];
     OffLineSQLLoader *loader = OffLineLoader;
     [loader configureDataBasePathWithCityPinyin:@"guangzhou"];
-    NSMutableArray *da = [loader searchStationInLineWithLineId:@15];
+//    NSMutableArray *da = [loader searchStationInLineWithLineId:@15];
     
-    NSMutableArray *arr = [loader searchLineViaStationWithZid:@59];
-    NSMutableArray *arr2 = [loader searchStationWithPinyin:@"dongxiaonan"];
-    NSLog(@"%p",arr);
-    
+   // NSMutableArray *arr = [loader searchLineViaStationWithZid:@59];
+//NSMutableArray *arr = [loader searchLineWithLineCode:@"88200d0a"];
+//    NSMutableArray *arr2 = [loader searchStationWithPinyin:@"dongxiaonan"];
+//    NSLog(@"%p",arr);
+    NSMutableArray *Category = [loader searchAllLineCategory];
+    NSMutableArray *CategoryId = [loader searchLineWithCategoryId:@11];
+    NSMutableArray *LineCode = [loader searchLineWithLineCode:@"88200d0a"];
+    NSMutableArray *linetext = [loader searchLineWithText:@"2"];
+    NSMutableArray *lineid = [loader searchStationInLineWithLineId:@31];
+    NSMutableArray *stationtext = [loader searchStationWithText:@"公园前"];
+    NSMutableArray *stationpinyin = [loader searchStationWithPinyin:@"gongyuan"];
+    NSMutableArray *stationid = [loader searchLineViaStationWithZid:@17505];
     
 //    self.tableView = [[UITableView alloc]initWithFrame:[UIScreen mainScreen].bounds];
 //    self.tableView.delegate = self;

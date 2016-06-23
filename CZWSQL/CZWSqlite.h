@@ -8,28 +8,63 @@
 
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
-@interface SqlQueryStringMaker : NSObject
+
+@interface SqlQueryStringBaseMaker : NSObject;
 @property (copy, nonatomic) NSString *result;
-- (SqlQueryStringMaker *(^)(NSString *))select;
-- (SqlQueryStringMaker *(^)(NSString *))from;
-- (SqlQueryStringMaker *(^)(NSString *))where;
-- (SqlQueryStringMaker *(^)(NSString *))groupBy;
-- (SqlQueryStringMaker *(^)(NSString *))orderBy;
-- (SqlQueryStringMaker *(^)(NSString *))limit;
-- (SqlQueryStringMaker *(^)(NSString *))value;
-- (SqlQueryStringMaker *(^)(NSString *))as;
+@end
+
+@interface SqlQueryStringStatementMaker : SqlQueryStringBaseMaker
+- (SqlQueryStringStatementMaker *(^)(NSString *))select;
+- (SqlQueryStringStatementMaker *(^)(NSString *))from;
+- (SqlQueryStringStatementMaker *(^)(NSString *))where;
+- (SqlQueryStringStatementMaker *(^)(NSString *))groupBy;
+- (SqlQueryStringStatementMaker *(^)(NSString *))orderBy;
+- (SqlQueryStringStatementMaker *(^)(NSString *))limit;
+@end
+
+@interface SqlQueryStringValueMaker : SqlQueryStringBaseMaker;
+- (SqlQueryStringValueMaker *(^)(NSString *))value;
+- (SqlQueryStringValueMaker *(^)(NSString *))as;
+@end
+
+@interface SqlQueryStringTableMaker : SqlQueryStringBaseMaker;
+/**
+ *  跟value方法实现一样
+ */
+- (SqlQueryStringTableMaker *(^)(NSString *))table;
+- (SqlQueryStringTableMaker *(^)(NSString *))as;
+@end
+
+@interface SqlQueryStringConditionMaker : SqlQueryStringBaseMaker;
+- (SqlQueryStringConditionMaker *(^)(NSString *))value;
+/**
+ *  相当于and语句
+ */
+- (SqlQueryStringConditionMaker *)also;
+/**
+ *  相当于or语句
+ */
+- (SqlQueryStringConditionMaker *)either;
+- (SqlQueryStringConditionMaker *(^)(NSString *))equalTo;
+- (SqlQueryStringConditionMaker *(^)(NSString *))unequalTo;
+- (SqlQueryStringConditionMaker *(^)(NSString *))greaterThan;
+- (SqlQueryStringConditionMaker *(^)(NSString *))lessThan;
+- (SqlQueryStringConditionMaker *(^)(NSString *))between;
+- (SqlQueryStringConditionMaker *(^)(NSString *))like;
 @end
 
 @interface NSString (czw_splicingSqlQueryString)
-+ (NSString *)makeSqlQueryString:(void (^)(SqlQueryStringMaker *makeQS))splicing;
-+ (NSString *)makeSqlQueryString_value:(void (^)(SqlQueryStringMaker *makeQS_value))splicing;
+/**
+ *  建立查询语句
+ */
++ (NSString *)makeSqlQueryString_statement:(void (^)(SqlQueryStringStatementMaker *make))splicing;
++ (NSString *)makeSqlQueryString_value:(void (^)(SqlQueryStringValueMaker *make))splicing;
++ (NSString *)makeSqlQueryString_table:(void (^)(SqlQueryStringTableMaker *make))splicing;
++ (NSString *)makeSqlQueryString_condition:(void (^)(SqlQueryStringConditionMaker *make))splicing;
 @end
 @interface CZWSqlite : NSObject
 @property (copy, nonatomic) NSString *currentDataBasePath;
 @property (assign, nonatomic) sqlite3 *database;
-
-
-- (NSString *)textToSimplified:(NSString *)text;
 
 - (void)czw_searchValues:(NSString *)values fromTable:(NSString *)table where:(NSString *)condition groupBy:(NSString *)groupBy orderBy:(NSString *)orderBy limit:(NSString *)limit handler:(void (^)(NSMutableDictionary *mDic))handler;
 
